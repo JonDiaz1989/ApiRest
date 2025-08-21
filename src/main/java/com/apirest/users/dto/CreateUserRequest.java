@@ -7,8 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-public class UserDto {
-
+public class CreateUserRequest {
     @JsonProperty("nombre")
     @JsonAlias("name")
     @NotBlank
@@ -21,7 +20,7 @@ public class UserDto {
     private String email;
 
     @JsonProperty("contraseña")
-    @JsonAlias({"contrasena", "password"})
+    @JsonAlias("password")
     @NotBlank
     private String password;
 
@@ -29,35 +28,11 @@ public class UserDto {
     @JsonAlias("phones")
     private List<PhoneDto> phones;
 
-    public String getName() {
+    public @NotBlank String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NotBlank String name) {
         this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<PhoneDto> getPhones() {
-        return phones;
-    }
-
-    public void setPhones(List<PhoneDto> phones) {
-        this.phones = phones;
     }
 }

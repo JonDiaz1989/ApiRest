@@ -1,30 +1,24 @@
 package com.apirest.users.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-public class UserDto {
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UpdateUserRequest {
     @JsonProperty("nombre")
     @JsonAlias("name")
-    @NotBlank
     private String name;
-
     @JsonProperty("correo")
     @JsonAlias("email")
-    @NotBlank
     @Email
     private String email;
-
     @JsonProperty("contraseña")
-    @JsonAlias({"contrasena", "password"})
-    @NotBlank
+    @JsonAlias("password")
     private String password;
-
     @JsonProperty("telefonos")
     @JsonAlias("phones")
     private List<PhoneDto> phones;
@@ -37,11 +31,11 @@ public class UserDto {
         this.name = name;
     }
 
-    public String getEmail() {
+    public @Email String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@Email String email) {
         this.email = email;
     }
 

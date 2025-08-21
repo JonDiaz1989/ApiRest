@@ -3,7 +3,7 @@ package com.apirest.users.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,64 +18,46 @@ class UserTest {
     }
 
     @Test
-    void shouldSetAndGetId() {
-        Long id = 1L;
+    void id_set_get() {
+        UUID id = UUID.randomUUID();
         user.setId(id);
         assertEquals(id, user.getId());
     }
 
     @Test
-    void shouldSetAndGetName() {
-        String name = "Jonathan Diaz";
-        user.setName(name);
-        assertEquals(name, user.getName());
+    void name_set_get() {
+        user.setName("Jonathan Diaz");
+        assertEquals("Jonathan Diaz", user.getName());
     }
 
     @Test
-    void shouldSetAndGetEmail() {
-        String email = "test@example.com";
-        user.setEmail(email);
-        assertEquals(email, user.getEmail());
+    void email_set_get() {
+        user.setEmail("test@example.com");
+        assertEquals("test@example.com", user.getEmail());
     }
 
     @Test
-    void shouldSetAndGetPassword() {
-        String password = "password";
-        user.setPassword(password);
-        assertEquals(password, user.getPassword());
+    void password_set_get() {
+        user.setPassword("encoded");
+        assertEquals("encoded", user.getPassword());
     }
 
     @Test
-    void shouldSetAndGetCreatedDate() {
-        Date date = new Date();
-        user.setCreated(date);
-        assertEquals(date, user.getCreated());
+    void timestamps_set_get() {
+        LocalDateTime now = LocalDateTime.now();
+        user.setCreatedAt(now);
+        user.setUpdatedAt(now);
+        user.setLastLoginAt(now);
+        assertEquals(now, user.getCreatedAt());
+        assertEquals(now, user.getUpdatedAt());
+        assertEquals(now, user.getLastLoginAt());
     }
 
     @Test
-    void shouldSetAndGetModifiedDate() {
-        Date date = new Date();
-        user.setModified(date);
-        assertEquals(date, user.getModified());
-    }
-
-    @Test
-    void shouldSetAndGetLastLoginDate() {
-        Date date = new Date();
-        user.setLastLogin(date);
-        assertEquals(date, user.getLastLogin());
-    }
-
-    @Test
-    void shouldSetAndGetToken() {
-        UUID token = UUID.randomUUID();
-        user.setToken(token);
-        assertEquals(token, user.getToken());
-    }
-
-    @Test
-    void shouldSetAndGetIsActive() {
+    void token_active_set_get() {
+        user.setToken("token-123");
         user.setActive(true);
+        assertEquals("token-123", user.getToken());
         assertTrue(user.isActive());
     }
 }

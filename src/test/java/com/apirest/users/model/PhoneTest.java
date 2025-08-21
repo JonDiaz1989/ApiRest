@@ -3,6 +3,8 @@ package com.apirest.users.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PhoneTest {
@@ -16,7 +18,7 @@ class PhoneTest {
 
     @Test
     void shouldSetAndGetId() {
-        Long id = 1L;
+        UUID id = UUID.randomUUID();
         phone.setId(id);
         assertEquals(id, phone.getId());
     }
@@ -25,7 +27,7 @@ class PhoneTest {
     void shouldSetAndGetNumber() {
         String number = "1234567890";
         phone.setNumber(number);
-        assertEquals(number, phone.getNumber());
+        assertEquals(number, phone.getNumber()); // <- aquí estaba el error
     }
 
     @Test
