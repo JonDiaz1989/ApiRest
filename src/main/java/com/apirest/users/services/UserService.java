@@ -73,7 +73,8 @@ public class UserService {
 
     @Transactional
     public User updateUser(UUID id, UpdateUserDto dto) {
-        User user = userRepository.findById(id).orElseThrow(java.util.NoSuchElementException::new);
+        User user = userRepository.findById(id)
+                .orElseThrow(java.util.NoSuchElementException::new);
 
         if (dto.getName() != null) {
             user.setName(dto.getName());
@@ -87,24 +88,20 @@ public class UserService {
         user.setUpdatedAt(java.time.LocalDateTime.now());
 
         if (dto.getPhones() != null) {
-            if (user.getPhones() != null) {
-                user.getPhones().clear();
-            } else {
+            if (user.getPhones() == null) {
                 user.setPhones(new java.util.ArrayList<>());
+            } else {
+                user.getPhones().clear();
             }
-            user = userRepository.save(user);
-            phoneRepository.deleteByUser(user);
 
-            java.util.List<Phone> newPhones = new java.util.ArrayList<>();
             for (PhoneDto p : dto.getPhones()) {
                 Phone phone = new Phone();
                 phone.setNumber(p.getNumber());
                 phone.setCityCode(p.getCityCode());
                 phone.setCountryCode(p.getCountryCode());
                 phone.setUser(user);
-                newPhones.add(phoneRepository.save(phone));
+                user.getPhones().add(phone);
             }
-            user.setPhones(newPhones);
         }
 
         return userRepository.save(user);

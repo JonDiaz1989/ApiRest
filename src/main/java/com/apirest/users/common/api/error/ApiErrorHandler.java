@@ -37,7 +37,11 @@ public class ApiErrorHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorMsg> unexpected() {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorMsg("Error interno"));
+    public ResponseEntity<ErrorMsg> unexpected(Exception ex) {
+
+        ex.printStackTrace();
+        
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorMsg("Error interno: " + ex.getMessage()));
     }
 }
