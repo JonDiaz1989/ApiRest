@@ -52,7 +52,8 @@ El proyecto sigue una **arquitectura por capas**:
 - **JWT Security**: Autenticación y autorización
 - **GlobalExceptionHandler**: Manejo centralizado de errores
 
-Para más detalles consulta la [documentación técnica](docs/README.md).
+
+Para mas detalles consulta los diagramas en [`/docs/diagrams.md`](docs/diagrams.md).
 
 ## 🚀 Instalación
 
@@ -319,8 +320,7 @@ docs/                              # 📚 Technical Documentation
     ├── user-flow.png
     └── database-model.png
 ```
-## Arquitectura
-Consulta los diagramas en [`/docs/diagrams.md`](docs/diagrams.md).
+
 
 
 ## 🔒 Seguridad
