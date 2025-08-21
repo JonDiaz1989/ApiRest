@@ -342,28 +342,7 @@ docs/                              # 📚 Technical Documentation
 - **🧪 JUnit 5**: Framework de testing moderno
 - **📦 Maven**: Gestión de dependencias y build
 
-## 🤝 Contribuir
 
-1. **Fork** el repositorio
-2. Crear **branch** de feature (`git checkout -b feature/AmazingFeature`)
-3. **Commit** los cambios (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** al branch (`git push origin feature/AmazingFeature`)
-5. Abrir **Pull Request**
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
-## 👨‍💻 Autor
-
-- **Jonathan Díaz** - [JonDiaz1989](https://github.com/JonDiaz1989)
-
-## 🙏 Reconocimientos
-
-- Spring Boot Team por el excelente framework
-- H2 Database por la base de datos liviana
-- JWT.io por la especificación de tokens
-- Swagger por las herramientas de documentación
 
 ---
 
