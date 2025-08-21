@@ -9,14 +9,13 @@ import com.apirest.users.model.User;
 import com.apirest.users.repository.PhoneRepository;
 import com.apirest.users.repository.UserRepository;
 import com.apirest.users.validation.PasswordValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,19 +78,18 @@ class UserServiceTest {
     void createUser_invalidPassword() {
         UserDto dto = newUserDto();
 
-        // La validación de password falla antes de tocar el repo/encoder
         doThrow(new IllegalArgumentException("La contraseña no cumple el formato requerido"))
                 .when(passwordValidator).validate(anyString());
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.createUser(dto));
         assertTrue(ex.getMessage().toLowerCase().contains("contraseña"));
 
-        // Asegura que no se llamó a dependencias posteriores
         verifyNoInteractions(userRepository, passwordEncoder, phoneRepository);
     }
 
     @Test
     void updateUser_ok() {
+        UUID id = UUID.randomUUID();
         UpdateUserDto update = new UpdateUserDto();
         update.setEmail("testmail@gmail.com");
         update.setName("Updated User");
@@ -101,18 +99,19 @@ class UserServiceTest {
         update.setPhones(Collections.singletonList(p));
 
         User existing = new User();
+        existing.setId(id);
         existing.setEmail("testmail@gmail.com");
         existing.setName("Old");
         existing.setPassword("oldEncoded");
         existing.setPhones(new ArrayList<>());
 
-        when(userRepository.findByEmail(update.getEmail())).thenReturn(Optional.of(existing));
+        when(userRepository.findById(id)).thenReturn(Optional.of(existing));
         doNothing().when(passwordValidator).validate(update.getPassword());
         when(passwordEncoder.encode(update.getPassword())).thenReturn("newEncoded");
         when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArgument(0));
         when(phoneRepository.save(any(Phone.class))).thenAnswer(i -> i.getArgument(0));
 
-        User user = userService.updateUser(update);
+        User user = userService.updateUser(id, update);
 
         assertEquals("Updated User", user.getName());
         assertEquals("testmail@gmail.com", user.getEmail());
@@ -124,12 +123,13 @@ class UserServiceTest {
 
     @Test
     void updateUser_notFound() {
+        UUID id = UUID.randomUUID();
         UpdateUserDto update = new UpdateUserDto();
         update.setEmail("none@test.com");
 
-        when(userRepository.findByEmail(update.getEmail())).thenReturn(Optional.empty());
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> userService.updateUser(update));
+        assertThrows(NoSuchElementException.class, () -> userService.updateUser(id, update));
     }
 
     @Test

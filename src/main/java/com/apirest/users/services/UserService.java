@@ -72,47 +72,41 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(UpdateUserDto updateUserDto) {
-        EmailValidator emailValidator = EmailValidator.getInstance();
-        if (!emailValidator.isValid(updateUserDto.getEmail())) {
-            throw new RuntimeException("El correo no es válido");
+    public User updateUser(UUID id, UpdateUserDto dto) {
+        User user = userRepository.findById(id).orElseThrow(java.util.NoSuchElementException::new);
+
+        if (dto.getName() != null) {
+            user.setName(dto.getName());
         }
 
-        User user = userRepository.findByEmail(updateUserDto.getEmail())
-                .orElseThrow(java.util.NoSuchElementException::new);
-
-        if (updateUserDto.getName() != null) {
-            user.setName(updateUserDto.getName());
-        }
-        if (updateUserDto.getPassword() != null) {
-            passwordValidator.validate(updateUserDto.getPassword());
-            user.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            passwordValidator.validate(dto.getPassword());
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
 
-        user.setUpdatedAt(LocalDateTime.now());
+        user.setUpdatedAt(java.time.LocalDateTime.now());
 
-        if (user.getPhones() == null) {
-            user.setPhones(new ArrayList<>());
-        } else {
-            user.getPhones().clear();
-        }
-        user = userRepository.save(user);
-        phoneRepository.deleteByUser(user);
-
-        List<Phone> newPhones = new ArrayList<>();
-        if (updateUserDto.getPhones() != null) {
-            for (PhoneDto phoneDto : updateUserDto.getPhones()) {
-                Phone phone = new Phone();
-                phone.setNumber(phoneDto.getNumber());
-                phone.setCityCode(phoneDto.getCityCode());
-                phone.setCountryCode(phoneDto.getCountryCode());
-                phone.setUser(user);
-                phone = phoneRepository.save(phone);
-                newPhones.add(phone);
+        if (dto.getPhones() != null) {
+            if (user.getPhones() != null) {
+                user.getPhones().clear();
+            } else {
+                user.setPhones(new java.util.ArrayList<>());
             }
+            user = userRepository.save(user);
+            phoneRepository.deleteByUser(user);
+
+            java.util.List<Phone> newPhones = new java.util.ArrayList<>();
+            for (PhoneDto p : dto.getPhones()) {
+                Phone phone = new Phone();
+                phone.setNumber(p.getNumber());
+                phone.setCityCode(p.getCityCode());
+                phone.setCountryCode(p.getCountryCode());
+                phone.setUser(user);
+                newPhones.add(phoneRepository.save(phone));
+            }
+            user.setPhones(newPhones);
         }
 
-        user.setPhones(newPhones);
         return userRepository.save(user);
     }
 

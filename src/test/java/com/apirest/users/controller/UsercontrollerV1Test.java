@@ -91,7 +91,7 @@ class UsersControllerV1Test {
         UUID id = UUID.randomUUID();
         when(userService.userExist(id)).thenReturn(Optional.of(userEntity(id)));
         User updated = userEntity(id); updated.setName("Angela Actualizada");
-        when(userService.updateUser(any())).thenReturn(updated);
+        when(userService.updateUser(eq(id), any())).thenReturn(updated);
 
         String body = """
         {
@@ -112,7 +112,7 @@ class UsersControllerV1Test {
         UUID id = UUID.randomUUID();
         when(userService.userExist(id)).thenReturn(Optional.of(userEntity(id)));
         User patched = userEntity(id); patched.setName("Nombre Patch");
-        when(userService.updateUser(any())).thenReturn(patched);
+        when(userService.updateUser(eq(id), any())).thenReturn(patched);
 
         String body = "{\"nombre\":\"Nombre Patch\"}";
 
