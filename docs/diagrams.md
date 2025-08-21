@@ -1,6 +1,6 @@
-Diagrams
+# Diagrams
 
-Architecture
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -13,25 +13,24 @@ R --> H2[(H2 In-Memory DB)]
 end
 ```
 
-Components
-
+## Components
 ```mermaid
 flowchart TB
-subgraph users
-CTRL[Controller]
-SVC[Service]
-DTO[DTOs (UserDto, UpdateUserDto, PhoneDto, UserResponse)]
-REP[Repository]
-ENT[Entities (User, Phone)]
-end
-DTO --> CTRL
-CTRL --> SVC
-SVC --> REP
-REP --> ENT
-SVC --> ENT
+  subgraph users
+    CTRL[Controller];
+    SVC[Service];
+    DTO["DTOs: UserDto\nUpdateUserDto\nPhoneDto\nUserResponse"];
+    REP[Repository];
+    ENT["Entities: User\nPhone"];
+  end
+  DTO --> CTRL
+  CTRL --> SVC
+  SVC --> REP
+  REP --> ENT
+  SVC --> ENT
 ```
 
-Sequence: Create User
+## Sequence: Create User
 
 ```mermaid
 sequenceDiagram
@@ -48,7 +47,7 @@ S-->>C: User
 C-->>U: 201 Created + Location + ApiResponse<UserResponse>
 ```
 
-Data Model
+## Data Model
 
 ```mermaid
 classDiagram
