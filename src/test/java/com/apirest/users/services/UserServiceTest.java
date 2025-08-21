@@ -27,10 +27,14 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-    @Mock private UserRepository userRepository;
-    @Mock private PhoneRepository phoneRepository;
-    @Mock private BCryptPasswordEncoder passwordEncoder;
-    @Mock private PasswordValidator passwordValidator;
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private PhoneRepository phoneRepository;
+    @Mock
+    private BCryptPasswordEncoder passwordEncoder;
+    @Mock
+    private PasswordValidator passwordValidator;
 
     private UserDto newUserDto() {
         UserDto dto = new UserDto();
@@ -38,7 +42,9 @@ class UserServiceTest {
         dto.setEmail("testmail@gmail.com");
         dto.setPassword("Abcdef12");
         PhoneDto p = new PhoneDto();
-        p.setNumber("1234567"); p.setCityCode("2"); p.setCountryCode("56");
+        p.setNumber("1234567");
+        p.setCityCode("2");
+        p.setCountryCode("56");
         dto.setPhones(Collections.singletonList(p));
         return dto;
     }
@@ -91,11 +97,12 @@ class UserServiceTest {
     void updateUser_ok() {
         UUID id = UUID.randomUUID();
         UpdateUserDto update = new UpdateUserDto();
-        update.setEmail("testmail@gmail.com");
         update.setName("Updated User");
         update.setPassword("Abcdef12");
         PhoneDto p = new PhoneDto();
-        p.setNumber("9999999"); p.setCityCode("2"); p.setCountryCode("56");
+        p.setNumber("9999999");
+        p.setCityCode("2");
+        p.setCountryCode("56");
         update.setPhones(Collections.singletonList(p));
 
         User existing = new User();
@@ -109,16 +116,16 @@ class UserServiceTest {
         doNothing().when(passwordValidator).validate(update.getPassword());
         when(passwordEncoder.encode(update.getPassword())).thenReturn("newEncoded");
         when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArgument(0));
-        when(phoneRepository.save(any(Phone.class))).thenAnswer(i -> i.getArgument(0));
 
         User user = userService.updateUser(id, update);
 
         assertEquals("Updated User", user.getName());
-        assertEquals("testmail@gmail.com", user.getEmail());
         assertEquals("newEncoded", user.getPassword());
         assertNotNull(user.getUpdatedAt());
         assertEquals(1, user.getPhones().size());
-        verify(phoneRepository, times(1)).deleteByUser(any(User.class));
+        assertEquals("9999999", user.getPhones().get(0).getNumber());
+        assertEquals("2", user.getPhones().get(0).getCityCode());
+        assertEquals("56", user.getPhones().get(0).getCountryCode());
     }
 
     @Test
@@ -141,7 +148,8 @@ class UserServiceTest {
 
     @Test
     void getUserByMail_ok() {
-        User u = new User(); u.setEmail("x@test.com");
+        User u = new User();
+        u.setEmail("x@test.com");
         when(userRepository.findByEmail("x@test.com")).thenReturn(Optional.of(u));
         Optional<User> got = userService.getUserByMail("x@test.com");
         assertTrue(got.isPresent());
