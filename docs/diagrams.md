@@ -2,6 +2,7 @@ Diagrams
 
 Architecture
 
+```mermaid
 flowchart LR
 Client[Client / Swagger UI / Postman] --> API[/Spring Boot API/]
 subgraph App
@@ -10,9 +11,11 @@ C --> S(UserService)
 S --> R[(UserRepository)]
 R --> H2[(H2 In-Memory DB)]
 end
+```
 
 Components
 
+```mermaid
 flowchart TB
 subgraph users
 CTRL[Controller]
@@ -26,9 +29,11 @@ CTRL --> SVC
 SVC --> REP
 REP --> ENT
 SVC --> ENT
+```
 
 Sequence: Create User
 
+```mermaid
 sequenceDiagram
 participant U as Client
 participant C as UsersControllerV1
@@ -41,9 +46,11 @@ S->>R: save(User)
 R-->>S: User
 S-->>C: User
 C-->>U: 201 Created + Location + ApiResponse<UserResponse>
+```
 
 Data Model
 
+```mermaid
 classDiagram
 class User {
 UUID id
@@ -65,3 +72,4 @@ String countryCode
 }
 
 User "1" --> "*" Phone
+```
